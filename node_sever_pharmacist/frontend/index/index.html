@@ -1,0 +1,169 @@
+
+<html>
+<head>
+  <title>Stytch Password Login with Vue CDN</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    #app {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+    h2 {
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    input:focus {
+      outline: none;
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      margin: 1rem 0;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .error {
+      color: #dc3545;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+    .welcome {
+      color: #28a745;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div v-if="!isLoggedIn">
+      <h2>Login</h2>
+      <input type="email" v-model="email" placeholder="Email" />
+      <input type="password" v-model="password" placeholder="Password" />
+      <button @click="login">Login</button>
+      <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+    </div>
+    <div v-else>
+      <p class="welcome">Welcome, {{ userEmail }}!</p>
+      <button @click="logout">Logout</button>
+    </div>
+  </div>
+
+
+  <!-- Load Vue from CDN (ES modules build)
+  <script type="module">
+    import { createApp, ref, onMounted } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+
+    // Dynamically import Stytch SDK
+    import('https://cdn.jsdelivr.net/npm/@stytch/vanilla-js/+esm').then(({ StytchUIClient }) => {
+      const app = createApp({
+        setup() {
+          const email = ref('');
+          const password = ref('');
+          const isLoggedIn = ref(false);
+          const userEmail = ref('');
+          const errorMessage = ref('');
+          const stytch = ref(null);
+
+          onMounted(() => {
+            // Initialize Stytch with your public token (replace with yours)
+            stytch.value = new StytchUIClient('public-token-test-dbadb410-4f5c-4cd7-aad7-082ca96adfd5');
+
+            // Check for existing session on page load
+            const sessionJwt = localStorage.getItem('stytch_session_jwt');
+            if (sessionJwt) {
+              stytch.value.session.get()
+                .then((session) => {
+                  if (session.authenticated) {
+                    isLoggedIn.value = true;
+                    userEmail.value = session.user.emails[0]?.email || 'User';
+                  }
+                })
+                .catch(() => localStorage.removeItem('stytch_session_jwt'));
+            }
+          });
+          let error_message_not_pharmacist="Role is not paramacist!";
+          const login = async () => {
+            try {
+              errorMessage.value = '';
+              const response = await stytch.value.passwords.authenticate({
+                email: email.value,
+                password: password.value,
+                session_duration_minutes: 60,
+              });
+
+
+
+
+
+
+              isLoggedIn.value = true;
+              userEmail.value = response.user.emails[0]?.email || 'User';
+              localStorage.setItem('stytch_session_jwt', response.session_jwt);
+              email.value = '';
+              password.value = '';
+            } catch (error) {
+              console.log(error)
+              if(error.message === error_message_not_pharmacist){
+                errorMessage.value ='User Not UnAuthorized';
+              }else {
+                errorMessage.value = error.error_message || 'Login failed. Check your email and password.';
+              }
+            }
+          };
+
+          const logout = () => {
+            stytch.value.session.revoke()
+              .then(() => {
+                isLoggedIn.value = false;
+                userEmail.value = '';
+                localStorage.removeItem('stytch_session_jwt');
+              })
+              .catch((error) => {
+                errorMessage.value = 'Logout failed: ' + error.message;
+              });
+          };
+
+          return { email, password, isLoggedIn, userEmail, errorMessage, login, logout };
+        },
+      });
+      app.mount('#app');
+    });
+  </script>
+  -->
+  <script  type="module" src="script.js"> </script>
+</body>
+</html>

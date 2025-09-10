@@ -2,6 +2,7 @@ import express from 'express';
 const cors = require('cors');
 import product from './routes/product';
 import order from './routes/order'
+import dashboard from './routes/dashboard';
 const app = express();
 
 const port = process.env.PORT || 3000;
@@ -15,6 +16,7 @@ app.use(cors({
 app.use(express.json());
 app.use('/',product);
 app.use('/',order);
+app.use('/',dashboard);
 console.log(`Attempting to run server on port ${port}`);
 
 

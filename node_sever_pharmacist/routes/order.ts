@@ -2,6 +2,17 @@ import postgres from "../config/database";
 import {schema} from "../config/order_validate";
 import{create_printable} from '../invoice/invoice_printable';
 const router=require('express').Router();
+const path=require('path');
+const fs=require('fs');
+
+router.get('/order',async(req:any,res:any)=>{
+   fs.read('add_order/order.html')
+
+
+
+
+
+});
 router.post('/order',async(req:any,res:any)=>{
     if(!req.accepts('json')){
 
@@ -35,9 +46,9 @@ router.post('/order',async(req:any,res:any)=>{
             vat:vat,
             total:total
         }
-        const
+  //      const
 
-        create_printable(invoice_info,)
+       //create_printable(invoice_info,)
 
         res.status(201).json({
             success:true,
