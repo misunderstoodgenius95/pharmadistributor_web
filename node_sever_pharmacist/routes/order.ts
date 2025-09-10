@@ -5,13 +5,17 @@ const router=require('express').Router();
 const path=require('path');
 const fs=require('fs');
 
-router.get('/order',async(req:any,res:any)=>{
-   fs.read('add_order/order.html')
 
+router.get('/order', async (req: any, res: any) => {
 
+    try {
+        let data = fs.readFileSync("frontend/add_order/order.html" );
+            res.set('Content-Type', 'text/html');
+            return res.send(data);
 
-
-
+    } catch (error) {
+        return res.status(404).send('File not found');
+    }
 });
 router.post('/order',async(req:any,res:any)=>{
     if(!req.accepts('json')){
