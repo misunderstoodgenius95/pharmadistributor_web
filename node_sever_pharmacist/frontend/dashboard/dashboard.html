@@ -5,24 +5,45 @@
     <title>Title</title>
     <link rel="stylesheet" href="style.css">
 </head>
+<body>
 <div id="app">
     <div class="title">
         <h2>Area Farmacisti</h2>
     </div>
-   <aside>
-       <ul @click.prevent="getMenu($event)">
-           <li><a href="#offer">Offerta</a></li>
-           <li><a href="#order">Ordine</a></li>
-       </ul>
-   </aside>
-    <div  v-html="container">
 
+    <div class="app-container">
+
+
+        <!-- Aside Container with Dynamic Components -->
+        <aside class="aside-container">
+
+            <nav class="aside-nav">
+                <button
+                        class="nav-button"
+                        :class="{ active: currentPage === 'offer' }"
+                        @click="setCurrentPage('offer')"
+                >
+                    Offerte
+                </button>
+                <button
+                        class="nav-button"
+                        :class="{ active: currentPage === 'order' }"
+                        @click="setCurrentPage('order')"
+                >
+                    Ordine
+                </button>
+            </nav>
+        </aside>
+            <div class="container">
+                <!-- Dynamic Component Rendering -->
+                <component :is="currentComponent" />
+            </div>
 
     </div>
 
+
 </div>
-<body>
-<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
 <script type="module" src="script.js"></script>
 </body>
 </html>

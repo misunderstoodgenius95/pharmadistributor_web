@@ -4,6 +4,7 @@ const router=Router();
 router.get('/products',async(req:any,res:any)=>{
     try {
         const result:any = await postgres.query('SELECT * FROM farmaco_all');
+        console.log(result)
         const farmacoWithPrice = result.rows.map(farmaco => ({
             ...farmaco,
             price: parseFloat((Math.random() * 45).toFixed(2))

@@ -1,69 +1,64 @@
-const{createApp,ref, onMounted}=Vue;
+// script.js
+import { createApp, ref, onMounted, computed } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.esm-browser.min.js';
+import { Order } from '../add_order/order_template.js';
+import { Offer } from '../offer/offer.js';
+
+// Debug imports
+console.log('Order component:', Order);
+console.log('Offer component:', Offer);
+
 createApp({
-  setup(){
-      const container=ref('');
+    components: {
+        Order,
+        Offer
+    },
+    setup() {
+        const currentPage = ref('order');
+
+        // Fixed the computed logic - it was backwards
+        const currentComponent = computed(() => {
+            console.log('Current page:', currentPage.value);
+            // Return the correct component name based on currentPage
+            return currentPage.value === 'offer' ? 'Offer' : 'Order';
+        });
+
+        const setCurrentPage = (page) => {
+            console.log("Setting current page to:", page);
+            currentPage.value = page;
+        };
+
+        const redirectToLogin = () => {
+            localStorage.removeItem('stytch_session_jwt');
+            window.location.href = '/node_sever_pharmacist/node_sever_pharmacist/frontend/index/index.html';
+        };
+
+        const checkSession = async () => {
+            try {
+                const token = localStorage.getItem('stytch_session_jwt');
+                if (!token) {
+                    console.log('No token found');
+                    // Commented out for debugging
+                     redirectToLogin();
+                    return;
+                }
 
 
-      function redictToLogin() {
+            } catch (error) {
+                console.error('Session check failed:', error);
+                 redirectToLogin();
+            }
+        };
 
-          localStorage.removeItem('stytch_session_jwt')
-          window.location.href='/untitled/index/index.html';
-      }
-      onMounted(()=>{
-          console.log("Mounted");
+        onMounted(() => {
+            console.log('Component mounted');
+            checkSession();
+        });
 
-          checkSession();
-      });
-      async function getMenu(event) {
-          let element = event.target;
-          let href = element.attributes.href.value.split('#')[1];
-          let url='';
-          if (href === "order") {
-              url='http://localhost:3000/order'
-
-          }else{
-              url='http://localhost:3000/offer'
-          }
-          container.value = await fetch(url);
-
-
-      }
-
-      const checkSession= async ()  => {
-          try {
-              const token = localStorage.getItem('stytch_session_jwt');
-              if (!token) {
-                  redictToLogin();
-                  return;
-
-              } else {
-                  const response = await fetch('https://localhost:3000/dashboard',
-                      {headers: {'Authorization': 'Bearer ' + jwt}})
-                  if (!response.ok){
-                      redictToLogin();
-                  }
-                  console.log(response)
-
-              }
-          }catch (error){
-           //   redictToLogin();
-          }
-          console.log("Success");
-
-
-      }
-      return{
-          getMenu,container
-      }
-
-
-
-
-
-
-
-
-
-
-  }
-}).mount('#app');
+        // Make sure to return all the functions and data the template needs
+        return {
+            currentPage,
+            currentComponent,
+            setCurrentPage
+        };
+    } // <-- This closing brace was missing!
+}).mount('#app'); // <-- This was completely missing!

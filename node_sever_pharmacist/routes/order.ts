@@ -2,7 +2,7 @@ import postgres from "../config/database";
 import {schema} from "../config/order_validate";
 import{create_printable} from '../invoice/invoice_printable';
 const router=require('express').Router();
-const path=require('path');
+
 const fs=require('fs');
 
 
@@ -18,12 +18,15 @@ router.get('/order', async (req: any, res: any) => {
     }
 });
 router.post('/order',async(req:any,res:any)=>{
+    console.log("Order post")
+    console.log(JSON.stringify(req.body, null, 2));
     if(!req.accepts('json')){
 
         return res.status(406).json({error:"Incorrect format"})
     }
    const{error}=schema.validate(req.body);
     if(error){
+        console.log(error)
         return res.status(400).json({error:"Bad Request!"});
     }
     let {farmacia_id,products,subtotal,vat,total,pharma_house,payment_mode}=req.body;

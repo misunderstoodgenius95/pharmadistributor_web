@@ -16,7 +16,10 @@ body {
     max-width: 1200px;
     margin: 0 auto;
 
-
+input{
+    font-size: 14px;
+    padding: 2em;
+}
 
 /* Step 2: Header and Search */
 .header_table {
