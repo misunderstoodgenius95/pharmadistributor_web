@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@types/ws": "^8.18.1",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
@@ -17,7 +18,9 @@
     "pdfkit": "^0.17.2",
     "pg": "^8.16.3",
     "pug": "2.0.0-beta11",
-    "stytch": "^12.32.1"
+    "stytch": "^12.32.1",
+    "typescript": "^5.9.2",
+    "ws": "^8.18.3"
   },
   "devDependencies": {
     "@types/joi": "^17.2.2",
