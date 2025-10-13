@@ -3,11 +3,11 @@ const {Router}=require('express');
 const router=Router();
 router.get('/products',async(req:any,res:any)=>{
     try {
-        const result:any = await postgres.query('SELECT * FROM farmaco_all');
+        const result:any = await postgres.query('select  * from seller_price\n' +
+            'inner join farmaco_all on farmaco_all.id=farmaco ');
         console.log(result)
         const farmacoWithPrice = result.rows.map(farmaco => ({
-            ...farmaco,
-            price: parseFloat((Math.random() * 45).toFixed(2))
+            ...farmaco
         }));
         console.log(farmacoWithPrice);
         res.json(farmacoWithPrice);

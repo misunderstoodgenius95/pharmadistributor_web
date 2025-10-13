@@ -4,6 +4,13 @@ createApp({
      const products = ref([]);
      const selects=ref([{productId:'',quantity:1}]);
      const isDisable=ref(true);
+     const farmacia=ref(1);
+     const payment_mode=ref('');
+
+
+
+
+
 
 
  const btn_add=((e)=>{
@@ -40,11 +47,29 @@ const getProductPrice=(productId)=>{
 
 
      const send_btn=((e)=>{
-
-
-
+         fetch('http://localhost:3000/order', {
+             method: 'POST',
+             header: {'Content-Type':'application/json'},
 
      });
+
+         const order_data={
+             farmacia_id:farmacia.value,
+             payment_mode:payment_mode.value,
+             products: selects.value.map(item => {
+                 const product = products.value.find(p => p.id == item.productId);
+                 return {
+                     id: parseInt(item.productId),
+                     price: product ? parseFloat(product.price) : 0,
+                     qty_selected: parseInt(item.quantity)
+                 };
+             }),
+             subtotal: parseFloat(grandSubtotal.value.toFixed(2)),
+             vat: parseFloat(grandVat.value.toFixed(2)),
+             total: parseFloat(grandTotal.value.toFixed(2))
+         };
+
+
      const grandSubtotal = computed(() => {
         return  selects.value.reduce((sum,item)=>{
            if (!item.productId) return sum
