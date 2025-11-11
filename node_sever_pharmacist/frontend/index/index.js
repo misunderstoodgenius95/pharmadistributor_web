@@ -56,6 +56,7 @@ import('https://cdn.jsdelivr.net/npm/@stytch/vanilla-js/+esm').then(({ StytchUIC
        
             }
             const handleSubmit= async (e)=>{
+                console.log("send")
               e.preventDefault();
                 if (validateEmail() && validatePassword()){
                     isSubmitted.value=true;

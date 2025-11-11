@@ -9,6 +9,7 @@ const fs=require('fs');
 
 router.post('/order',async(req:any,res:any)=>{
     console.log("Order post")
+    console.log(req.body)
     console.log(JSON.stringify(req.body, null, 2));
     if(!req.accepts('json')){
 
@@ -32,8 +33,8 @@ router.post('/order',async(req:any,res:any)=>{
         const create_at=invoice.rows[0].create_at;
         const emission_date=new Date(create_at).toString();
         for(const product of products){
-            await postgres.query('INSERT INTO seller_order_detail(seller_order,price,quantity,vat_percent,farmaco_id) VALUES ($1,$2,$3,$4,$5) RETURNING *',
-                [id,product.price,product.qty_selected,2,product.id]);
+            await postgres.query('INSERT INTO seller_order_detail(seller_order,price,quantity,vat_percent,farmaco) VALUES ($1,$2,$3,$4,$5) RETURNING *',
+                [id,product.final_price,product.qty_selected,product.vat_percent,product.id]);
         }
         await postgres.query('COMMIT');
         const invoice_info={
@@ -43,7 +44,6 @@ router.post('/order',async(req:any,res:any)=>{
             vat:vat,
             total:total
         }
-  //      const
 
        //create_printable(invoice_info,)
 

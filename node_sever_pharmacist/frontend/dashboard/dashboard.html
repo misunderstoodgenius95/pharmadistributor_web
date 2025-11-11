@@ -21,14 +21,14 @@
                 <button
                         class="nav-button"
                         :class="{ active: currentPage === 'offer' }"
-                        @click="setCurrentPage('offer')"
+                        @click="getOffer"
                 >
                     Offerte
                 </button>
                 <button
                         class="nav-button"
                         :class="{ active: currentPage === 'order' }"
-                        @click="setCurrentPage('order')"
+                        @click="getOrder"
                 >
                     Ordine
                 </button>
@@ -44,6 +44,6 @@
 
 </div>
 
-<script type="module" src="script.js"></script>
+<script type="module" src="dashboard.js"></script>
 </body>
 </html>

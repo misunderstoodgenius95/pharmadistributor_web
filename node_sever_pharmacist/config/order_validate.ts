@@ -10,7 +10,7 @@ const schema=Joi.object({
     products: Joi.array().items(
         Joi.object({
             id: Joi.number().integer().required(),
-            price: Joi.number().positive().required(),
+            final_price: Joi.number().positive().required(),
             qty_selected: Joi.number().integer().min(1).required(),
             vat_percent: Joi.number().min(0).max(100).required(),
             pharma_id:Joi.number().integer().required()

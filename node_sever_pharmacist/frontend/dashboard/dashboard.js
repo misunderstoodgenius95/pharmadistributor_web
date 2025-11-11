@@ -1,31 +1,28 @@
 // script.js
 import { createApp, ref, onMounted, computed } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.esm-browser.min.js';
-import { Order } from '../add_order/order_template.js';
-import { Offer } from '../offer/offer.js';
+
 
 // Debug imports
-console.log('Order component:', Order);
-console.log('Offer component:', Offer);
+
 
 createApp({
-    components: {
-        Order,
-        Offer
-    },
+
     setup() {
-        const currentPage = ref('order');
+        const getOffer=()=>{
 
-        // Fixed the computed logic - it was backwards
-        const currentComponent = computed(() => {
-            console.log('Current page:', currentPage.value);
-            // Return the correct component name based on currentPage
-            return currentPage.value === 'offer' ? 'Offer' : 'Order';
-        });
+            return window.location.replace('/node_sever_pharmacist/node_sever_pharmacist/frontend/offer/offer.html')
+        }
+        const getOrder=()=>{
 
-        const setCurrentPage = (page) => {
-            console.log("Setting current page to:", page);
-            currentPage.value = page;
-        };
+            return window.location.replace('/node_sever_pharmacist/node_sever_pharmacist/frontend/order/order.html')
+        }
+
+
+
+
+
+
+
 
         const redirectToLogin = () => {
             localStorage.removeItem('stytch_session_jwt');
@@ -56,9 +53,7 @@ createApp({
 
         // Make sure to return all the functions and data the template needs
         return {
-            currentPage,
-            currentComponent,
-            setCurrentPage
+          getOffer,getOrder
         };
     } // <-- This closing brace was missing!
 }).mount('#app'); // <-- This was completely missing!

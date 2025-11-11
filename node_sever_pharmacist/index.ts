@@ -6,16 +6,16 @@ import dashboard from './routes/dashboard';
 import  offer from './routes/offer';
 import aside from './routes/aside';
 import reset from './routes/reset_password'
+
 import  *  as wsServer from './serverchat/chatServer';
 const app = express();
-
+const constants = require('node:constants');
 const port = process.env.PORT || 3000;
 app.use(cors({
-    origin: ['http://localhost:63343','http://localhost:3000'], // Allow requests from this origin
-    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
-    // Allowed headers
- }));
+    origin: 'http://localhost:63342',
+    credentials: true
+}));
+
 
 app.use(express.json());
 app.use('/',product);
