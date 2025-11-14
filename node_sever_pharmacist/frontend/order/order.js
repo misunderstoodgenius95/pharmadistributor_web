@@ -1,11 +1,17 @@
-import { createApp, ref, onMounted, computed,reactive } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+const {createApp,ref,computed,watch,reactive,onMounted}=Vue
+const { createPinia,storeToRefs  } = Pinia;
+import { useAuthStore} from '../pinia/pinia.js ';
 
-createApp({
+const pinia = createPinia();
+const app=createApp({
  setup() {
+     const authStore = useAuthStore();
+
      const products = ref([]);
+     const farmacia=ref(sessionStorage.getItem("pharmacy_id"))
      const selects = ref([{productId: '', quantity: 1}]);
      const isDisable = ref(true);
-     const farmacia = ref(1);
+
      const payment_mode = ref('');
      const isDialogSuccess=ref(false);
      const errors = reactive({
@@ -61,6 +67,13 @@ const closeDialog=()=>{
          return true;
      };
 
+     const logout= async ()=>{
+         await authStore.logout();
+         redirectToLogin();
+     }
+     const redirectToLogin = () => {
+         window.location.href = '/node_sever_pharmacist/node_sever_pharmacist/frontend/index/index.html';
+     };
 
 
      const send_btn = (async (e) => {
@@ -149,7 +162,7 @@ const closeDialog=()=>{
 
 
 
-     return {
+     return {logout,
          products,
          btn_add,
          selects,
@@ -170,4 +183,6 @@ const closeDialog=()=>{
 
 
 
-}).mount('#app')
+});
+app.use(pinia);
+app.mount('#app');

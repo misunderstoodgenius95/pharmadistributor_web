@@ -1,12 +1,21 @@
 const {createApp,ref,computed,watch}=Vue
-createApp({
+const { createPinia } = Pinia;
+import { useAuthStore } from '../pinia/pinia.js ';
+
+const pinia = createPinia();
+
+
+
+
+const app=createApp({
 setup() {
+    const authStore = useAuthStore();
     const categories = ref((['Tutti','Antibiotico','AntiDepressivo','Ansiolitici','Antipertensivo']))
     const activeCategory=ref("Tutti");
     const filterDrug = ref([]);
     const cart=ref([]);
     const isDisabled=ref(true);
-    const farmacia=ref(1)
+    const farmacia=ref(sessionStorage.getItem("pharmacy_id"))
     const isDialogSuccess=ref(false);
     const fetchData = async (category) => {
         try {
@@ -115,15 +124,24 @@ setup() {
 
             });
 
+    const logout= async ()=>{
+        await authStore.logout();
+        redirectToLogin();
+    }
+    const redirectToLogin = () => {
+        window.location.href = '/node_sever_pharmacist/node_sever_pharmacist/frontend/index/index.html';
+    };
 
 
 
 
             return{
-        categories,isDialogSuccess,activeCategory,filterDrug,fetchData,change_Date,cart,addToCart,increaseQty,decreaseQty,item_remove,subtotal,tax,total,isDisabled,sendOrder
+        categories,logout,isDialogSuccess,activeCategory,filterDrug,fetchData,change_Date,cart,addToCart,increaseQty,decreaseQty,item_remove,subtotal,tax,total,isDisabled,sendOrder
     }
 }
 
 
 
-}).mount('#app');
+});
+app.use(pinia);
+app.mount('#app');

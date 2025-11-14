@@ -1,7 +1,13 @@
-import { createApp, ref, onMounted,watch,computed } from 'https://unpkg.com/vue@3/dist/vue.esm-browser.js';
+const { createApp, ref, onMounted,watch,computed } = Vue;
+const { createPinia, defineStore, storeToRefs } = Pinia;
+import {StytchUIClient} from 'https://cdn.jsdelivr.net/npm/@stytch/vanilla-js/+esm'
+import { useAuthStore } from '../pinia/pinia.js ';
+const pinia = createPinia();
 
-// Dynamically import Stytch SDK
-import('https://cdn.jsdelivr.net/npm/@stytch/vanilla-js/+esm').then(({ StytchUIClient }) => {
+
+
+
+
     const app = createApp({
         setup() {
             const email = ref('');
@@ -13,6 +19,7 @@ import('https://cdn.jsdelivr.net/npm/@stytch/vanilla-js/+esm').then(({ StytchUIC
             const errorMessage = ref('');
             const  isSubmitted=ref(false);
             const stytch = ref(null);
+            const authStore = useAuthStore();
             const regex_password=/(?=.*[A-Z])*(?=.*[a-z])(?=.*\d)(?=.*\W).{11,}/;
             const regex_email=/^[\w]+[\.]*[-]*[\w]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -60,7 +67,7 @@ import('https://cdn.jsdelivr.net/npm/@stytch/vanilla-js/+esm').then(({ StytchUIC
               e.preventDefault();
                 if (validateEmail() && validatePassword()){
                     isSubmitted.value=true;
-                     await login();
+                     authStore.login(email,password,errorMessage );
 
                 }else{
                     isSubmitted.value=false;
@@ -78,50 +85,12 @@ import('https://cdn.jsdelivr.net/npm/@stytch/vanilla-js/+esm').then(({ StytchUIC
 
 
 
-            const login = async () => {
-                try {
-                    errorMessage.value = '';
-                    const response = await stytch.value.passwords.authenticate({
-                        email: email.value,
-                        password: password.value,
-                        session_duration_minutes: 60,
-                    });
-                    console.log(response.user.roles);
-                    const userRoles = response.user.roles;
-                    let isPharmacist = userRoles.includes('pharmacist');
-                    if(isPharmacist) {
 
-                        //showDashboard.value = true;
-
-
-                        localStorage.setItem('stytch_session_jwt', response.session_jwt);
-                        errorMessage.value = 'Login successful!';
-
-
-                        // fetch immediato
-                        window.location.href = '/node_sever_pharmacist/node_sever_pharmacist/frontend/dashboard/dashboard.html';
-
-                        email.value = '';
-                        password.value = '';
-
-                    }else{
-                        throw new Error(error_message_not_pharmacist);
-
-                    }
-                } catch (error) {
-                    console.log(error);
-                    if(error.message === error_message_not_pharmacist){
-                        errorMessage.value ='User Not Authorized';
-                    }else {
-                        errorMessage.value = error.error_message || 'Login failed. Check your email and password.';
-                    }
-                }
-            };
             onMounted(() => {
 
 
                 // Initialize Stytch with your public token (replace with yours)
-                stytch.value = new StytchUIClient('public-token-test-dbadb410-4f5c-4cd7-aad7-082ca96adfd5');
+               /* stytch.value = new StytchUIClient('public-token-test-dbadb410-4f5c-4cd7-aad7-082ca96adfd5');
 
                 // Check for existing session on page load
                 const sessionJwt = localStorage.getItem('stytch_session_jwt');
@@ -134,7 +103,7 @@ import('https://cdn.jsdelivr.net/npm/@stytch/vanilla-js/+esm').then(({ StytchUIC
                             }
                         })
                         .catch(() => localStorage.removeItem('stytch_session_jwt'));
-                }
+                }*/
             });
             let error_message_not_pharmacist="Role is not paramacist!";
 
@@ -153,8 +122,9 @@ import('https://cdn.jsdelivr.net/npm/@stytch/vanilla-js/+esm').then(({ StytchUIC
                     });
             };
 
-            return { email, password,   isButtonDisabled, isLoggedIn,send, userEmail,validateEmail,validatePassword,handleSubmit,isSubmitted, errorMessage , errorMail,errorPassword,login, logout };
+            return { email, password,  isButtonDisabled, isLoggedIn,send, userEmail,validateEmail,validatePassword,handleSubmit,isSubmitted, errorMessage , errorMail,errorPassword };
         },
     });
+    app.use(pinia);
     app.mount('#app');
-});
+

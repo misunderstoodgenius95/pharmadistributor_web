@@ -78,7 +78,7 @@ socket.value.onopen=()=>{
                     console.log("text:   "+text)
 
                         messages.value.push({
-                        text:text,
+                        text:"Venditore : "+text,
                         timestamp: new Date()
                     });
                 }
@@ -91,7 +91,15 @@ socket.value.onopen=()=>{
      });
 
     const closeChat = (e) => {
-        console.log(e)
+        console.log("Closing socket...");
+        if (socket.value && socket.value.readyState === WebSocket.OPEN) {
+            socket.value.close(1000, "Client closed connection"); // 1000 = normal closure
+            console.log("Socket closed");
+
+
+            window.location.href="/node_sever_pharmacist/node_sever_pharmacist/frontend/dashboard/dashboard.html";
+        }
+
     }
 
 
