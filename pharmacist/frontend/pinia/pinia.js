@@ -28,10 +28,11 @@ const pinia=createPinia();
                 const userRoles = response.user.roles;
                 let isPharmacist = userRoles.includes('pharmacist');
                 if(isPharmacist) {
-                    this.email=email;
+                    this.email=email.value;
                     this.isLoggedIn=true;
                     this.token=response.session_jwt;
                     sessionStorage.setItem("pharmacy_id",response.user.trusted_metadata.pharmacy_id);
+                    sessionStorage.setItem("email",email.value)
                     window.location.href='/pharmacist/frontend/dashboard.html';
 
 
@@ -55,6 +56,7 @@ const pinia=createPinia();
                 if(this.stytch){
                     await this.stytch.session.revoke();
                     sessionStorage.removeItem("pharmacy_id");
+                    sessionStorage.removeItem("email")
                 }
             }catch (error){
                 throw  new Error("Error");

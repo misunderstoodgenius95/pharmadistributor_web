@@ -97,6 +97,7 @@ export function useChaCha20() {
     // Core decryption function
     const decrypt = async (encryptedData) => {
         try {
+            console.log("decrypt() INPUT =", encryptedData);
             error.value = '';
             isLoading.value = true;
 

@@ -7,7 +7,7 @@ import  offer from './routes/offer';
 import aside from './routes/aside';
 import reset from './routes/reset_password'
 
-import  *  as wsServer from './serverchat/chatServer';
+ require('./serverchat/chatServer.js');
 const app = express();
 const constants = require('node:constants');
 const port = process.env.PORT || 3000;

@@ -17,8 +17,9 @@ createApp({
 
 
 socket.value.onopen=()=>{
+    const email=sessionStorage.getItem("email");
     const data={
-        userName:"pharmacist@example.com",
+        userName:email,
         messageType:'Starting',
         userType:'pharmacist'
     };
@@ -27,9 +28,10 @@ socket.value.onopen=()=>{
 
 }// SEND MESSAGE
     const sendMessage = async (e) => {
+    const email=sessionStorage.getItem("email");
         const encrypted = await encrypt(newMessage.value);
         const value = {
-            from: "pharmacist@example.com",
+            from: email,
             to: seller.value,
             type: "Chat",
             messages: encrypted
@@ -49,6 +51,7 @@ socket.value.onopen=()=>{
 // INCOMING MESSAGE
      watch(new_message, async (value_chat) => {
             try {
+                console.log("message")
                 const data = JSON.parse(new_message.value);
                 console.log(data.type);
 
@@ -74,7 +77,8 @@ socket.value.onopen=()=>{
 
                 }
                 else if (data.type === "Chat"){
-                  const text= await decrypt(data.Message)
+                  const text= await decrypt(data.message)
+                    console.log("Testo")
                     console.log("text:   "+text)
 
                         messages.value.push({
