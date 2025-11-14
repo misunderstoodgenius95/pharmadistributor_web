@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="order.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://unpkg.com/vue-demi@0.14.10/lib/index.iife.js"></script>
+    <script src="https://unpkg.com/pinia@2.1.7/dist/pinia.iife.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="header_container">
+        <div class="header_title">
+            <h2>Gestione Ordini</h2>
+            <p>Crea ordini mediante un semplice click!</p>
+        </div>
+        <div class="header_logout">
+            <button @click="logout">Logout</button>
+        </div>
+    </div>
+
+    <div v-if="isDialogSuccess" class="success">
+        <div class="dialog_panel">
+            <h3>Ordine Creato con successo</h3>
+            <button @click="closeDialog">Continua lo shopping</button>
+        </div>
+    </div>
+
+    <div v-if="!isDialogSuccess" class="header_add">
+        <h2>Crea Nuovo Ordine</h2>
+
+        <form class="form_add_order">
+            <div class="order_body" v-for="(select, index) in selects" :key="index">
+                <select
+                        @change="handleProductChange(select, index)"
+                        class="item"
+                        name="add_item"
+                        v-model="select.productId"
+                >
+                    <option value="">Seleziona un prodotto</option>
+                    <option
+                            v-for="product in products"
+                            :key="product.id"
+                            :value="product.id"
+                    >
+                        {{product.nome + " " + product.misura + " " + product.tipologia + " " + product.qty}}
+                    </option>
+                </select>
+
+                <input
+                        type="number"
+                        v-model.number="select.quantity"
+                        step="1"
+                        min="1"
+                        max="1000"
+                >
+
+                <p>€{{getProductPrice(select.productId)}}</p>
+                <p>IVA: €{{getItemVat(select)}}</p>
+                <p>Subtotale: €{{getItemSubtotal(select)}}</p>
+            </div>
+
+            <button @click.prevent="btn_add" class="plus_button">Aggiungi Farmaco</button>
+
+            <input
+                    required
+                    v-model="payment_mode"
+                    type="text"
+                    placeholder="Metodo di Pagamento"
+            >
+            <span v-if="errors.payment_mode" class="error">{{ errors.payment_mode }}</span>
+
+            <p>Subtotale: €{{grandSubtotal.toFixed(2)}}</p>
+            <p>IVA: €{{grandVat.toFixed(2)}}</p>
+            <p>Totale: €{{grandTotal.toFixed(2)}}</p>
+
+            <input
+                    :disabled="isDisable"
+                    @click.prevent="send_btn"
+                    class="btn_send"
+                    type="submit"
+                    value="Invia"
+            >
+        </form>
+    </div>
+
+    <div class="recent_order">
+        <div class="recent_order_header">
+            <p>Ordini Recenti</p>
+        </div>
+        <div class="order_body">
+        </div>
+    </div>
+</div>
+
+<script type="module" src="order.js"></script>
+</body>
+</html>

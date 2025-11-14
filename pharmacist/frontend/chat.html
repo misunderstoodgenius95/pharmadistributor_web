@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <link rel="stylesheet" href="chat.css">
+</head>
+<body>
+<div id="app">
+<div class="chat-container">
+<div class="container_header">
+<p>Chat con il venditore</p>
+</div>
+<div class="message_container">
+
+<div :class="{wait_container:true,hidden:!isLoading}">
+  <p>In attesa che il venditore si connetta</p>
+    <div :class="{spinner:true}"></div>
+</div>
+    <p v-if="loginMessage" >Connesso con il Venditore</p>
+    <p v-for="message in messages" :key="message.id">{{message.timestamp+" :  "+message.text}}</p>
+</div>
+  <div class="content_btn">
+   <form  @submit.prevent="sendMessage">
+       <textarea v-model="newMessage" placeholder="Inserisci il testo"></textarea>
+       <div class="input_container">
+       <input type="submit" :disabled="disabled_button" value="Invia Messaggio" @click.prevent="sendMessage">
+       <input type="submit"  value="Chiudi Chat" @click.prevent="closeChat">
+       </div>
+   </form>
+
+
+
+
+
+
+</div>
+</div>
+</div>
+<script type="module">
+    import cryptojs from 'https://cdn.jsdelivr.net/npm/cryptojs@2.5.3/+esm'
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/8.0.20/jsrsasign-all-min.js"></script>
+<script  type="module" src="chat.js"></script>
+
+
+</body>
+</html>
